@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>choti khushi — a tiny parcel of joy</title>
+<meta name="description" content="choti khushi — hand-make tiny digital gifts, seal them in a virtual parcel, and send someone a little joy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Oswald:wght@300;400;500;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf7f2; --cream2:#f4eee3; --ink:#1a1a1a; --ink-soft:#4a4a44;
+  --pink:#f2c9ce; --pink-d:#d99aa3; --mint:#c4e3cb; --mint-d:#8fbf9a;
+  --tan:#e8d8ba; --kraft:#c9a06b; --kraft-d:#a67c4b; --white:#fffdf9;
+  --shadow:0 6px 18px rgba(26,26,26,.10);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--cream); color:var(--ink);
+  font-family:'Oswald',sans-serif; font-weight:300;
+  min-height:100vh; overflow-x:hidden;
+  background-image:radial-gradient(rgba(26,26,26,.045) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+.script{font-family:'Pinyon Script',cursive;}
+.type{font-family:'Special Elite',monospace;}
+h1,h2,h3{font-family:'Oswald',sans-serif; font-weight:500; letter-spacing:.04em; margin:0;}
+p{line-height:1.65;}
+a{color:inherit;}
+#app{max-width:640px; margin:0 auto; padding:0 18px 90px;}
+.lower{text-transform:lowercase;}
+/* ---------- paper cards ---------- */
+.card{
+  background:var(--white); border:1px solid rgba(26,26,26,.08);
+  border-radius:14px; box-shadow:var(--shadow); padding:22px; position:relative;
+}
+.tilt-l{transform:rotate(-1.2deg);} .tilt-r{transform:rotate(1.1deg);} .tilt-l2{transform:rotate(-.6deg);}
+.tape{
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:92px; height:26px; background:rgba(232,216,186,.85);
+  border-left:1px dashed rgba(26,26,26,.25); border-right:1px dashed rgba(26,26,26,.25);
+  box-shadow:0 2px 4px rgba(26,26,26,.08);
+}
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-block; font-family:'Oswald',sans-serif; font-weight:500; letter-spacing:.08em;
+  text-transform:lowercase; border:2px solid var(--ink); background:var(--ink); color:var(--cream);
+  border-radius:999px; padding:13px 34px; font-size:17px; cursor:pointer;
+  box-shadow:3px 3px 0 rgba(26,26,26,.22); transition:transform .12s, box-shadow .12s;
+  text-decoration:none; text-align:center;
+}
+.btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(26,26,26,.22);}
+.btn.ghost{background:transparent; color:var(--ink);}
+.btn.pink{background:var(--pink-d); border-color:var(--ink); color:var(--ink);}
+.btn.mint{background:var(--mint-d); border-color:var(--ink); color:var(--ink);}
+.btn:disabled{opacity:.35; cursor:not-allowed; transform:none;}
+.btn.small{padding:8px 20px; font-size:14px;}
+.pill-cta{
+  display:inline-block; border:2px solid var(--ink); background:var(--white); color:var(--ink);
+  border-radius:999px; padding:8px 22px; font-size:15px; font-weight:500; letter-spacing:.06em;
+  cursor:pointer; box-shadow:2px 2px 0 rgba(26,26,26,.18); transition:transform .12s;
+}
+.pill-cta:active{transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(26,26,26,.18);}
+.pill-cta.done{background:var(--mint);}
+/* ---------- inputs ---------- */
+.field{margin:14px 0;}
+.field label{display:block; font-family:'Special Elite',monospace; font-size:13px; margin-bottom:6px; color:var(--ink-soft);}
+.field input[type=text]{
+  width:100%; font-family:'Pinyon Script',cursive; font-size:30px; color:var(--ink);
+  background:var(--white); border:2px dashed rgba(26,26,26,.3); border-radius:10px;
+  padding:8px 16px; outline:none;
+}
+.field input[type=text]:focus{border-color:var(--pink-d); border-style:solid;}
+/* ---------- swatches ---------- */
+.swatches{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0;}
+.swatch{
+  width:44px; height:44px; border-radius:50%; border:2px solid rgba(26,26,26,.25);
+  cursor:pointer; transition:transform .12s; flex:0 0 auto;
+}
+.swatch.sel{border-color:var(--ink); transform:scale(1.15); box-shadow:0 0 0 3px var(--cream),0 0 0 5px var(--ink);}
+/* ---------- gift cards on make page ---------- */
+.gift-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0;}
+@media(max-width:420px){.gift-grid{grid-template-columns:1fr 1fr; gap:10px;}}
+.gift-card{
+  background:var(--white); border:1px solid rgba(26,26,26,.1); border-radius:12px;
+  padding:16px 12px; text-align:center; box-shadow:var(--shadow); position:relative;
+}
+.gift-card:nth-child(odd){transform:rotate(-1deg);} .gift-card:nth-child(even){transform:rotate(1deg);}
+.gift-card .emoji{font-size:38px; display:block; margin-bottom:6px;}
+.gift-card h3{font-size:16px; margin:4px 0 10px;}
+.gift-card .mins{font-family:'Special Elite',monospace; font-size:11px; color:var(--ink-soft); display:block; margin-top:8px;}
+/* ---------- modal ---------- */
+.modal-back{
+  position:fixed; inset:0; background:rgba(26,26,26,.45); z-index:50;
+  display:flex; align-items:flex-end; justify-content:center; padding:0;
+}
+@media(min-width:560px){.modal-back{align-items:center; padding:20px;}}
+.modal{
+  background:var(--cream); border-radius:20px 20px 0 0; width:100%; max-width:620px;
+  max-height:92vh; overflow-y:auto; padding:24px 20px 40px; position:relative;
+  border-top:3px solid var(--ink);
+}
+@media(min-width:560px){.modal{border-radius:20px; border:3px solid var(--ink);}}
+.modal .x{
+  position:absolute; top:12px; right:14px; width:36px; height:36px; border-radius:50%;
+  border:2px solid var(--ink); background:var(--white); font-size:18px; cursor:pointer; line-height:1;
+}
+.modal h2{font-size:24px; margin-bottom:4px;}
+.modal .hint{font-family:'Special Elite',monospace; font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+/* ---------- envelope (letter) ---------- */
+.env-wrap{perspective:900px; width:280px; height:190px; margin:18px auto; position:relative; cursor:pointer;}
+.env-body{position:absolute; inset:0; border-radius:8px; box-shadow:var(--shadow); border:2px solid rgba(26,26,26,.15);}
+.env-flap{
+  position:absolute; top:0; left:0; right:0; height:52%; z-index:3;
+  transform-origin:top center; transition:transform .6s ease; border-radius:8px 8px 0 0;
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  border:2px solid rgba(26,26,26,.15); border-bottom:none;
+}
+.env-wrap.open .env-flap{transform:rotateX(178deg); z-index:1;}
+.env-letter{
+  position:absolute; left:14px; right:14px; top:8px; bottom:8px; z-index:2;
+  background:repeating-linear-gradient(#fffdf9 0 26px, #e8e2d2 26px 27px);
+  border:1px solid rgba(26,26,26,.12); border-radius:4px; padding:10px;
+  transition:transform .6s ease .25s; overflow:hidden;
+}
+.env-wrap.open .env-letter{transform:translateY(-64%); z-index:4; box-shadow:var(--shadow);}
+.env-letter .mini{font-family:'Special Elite',monospace; font-size:11px; white-space:pre-wrap; color:var(--ink-soft);}
+textarea.ruled{
+  width:100%; min-height:150px; font-family:'Special Elite',monospace; font-size:15px; line-height:27px;
+  background:repeating-linear-gradient(#fffdf9 0 26px, #e8e2d2 26px 27px);
+  border:2px solid rgba(26,26,26,.2); border-radius:8px; padding:6px 12px; resize:vertical; outline:none; color:var(--ink);
+}
+/* ---------- sticker canvas ---------- */
+.draw-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:10px 0;}
+.brushdot{border-radius:50%; border:2px solid var(--ink); cursor:pointer; background:var(--white);}
+canvas.draw{
+  background:#fffdf9; border:2px dashed rgba(26,26,26,.3); border-radius:12px;
+  touch-action:none; display:block; margin:0 auto; cursor:crosshair; max-width:100%;
+}
+.diecut{position:relative; display:inline-block;}
+.diecut canvas{border-radius:12px; display:block;}
+.shine{position:absolute; inset:0; border-radius:12px; pointer-events:none;}
+.shine.gloss{background:linear-gradient(115deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.05) 35%, transparent 60%);}
+.shine.holo{background:linear-gradient(115deg, rgba(255,120,200,.30), rgba(120,220,255,.30), rgba(255,240,150,.30), rgba(170,255,170,.30)); mix-blend-mode:screen;}
+/* ---------- tune sequencer ---------- */
+.seq{display:grid; grid-template-columns:repeat(16, 1fr); gap:3px; margin:12px 0;}
+.seq .cell{
+  aspect-ratio:1; border-radius:4px; background:#fffdf9; border:1px solid rgba(26,26,26,.18); cursor:pointer; padding:0;
+}
+.seq .cell.on{background:var(--pink-d); border-color:var(--ink);}
+.seq .cell.playing{box-shadow:0 0 0 3px var(--mint-d);}
+.seq-labels{display:grid; grid-template-columns:34px 1fr; gap:3px; align-items:center;}
+.seq-labels .nl{font-family:'Special Elite',monospace; font-size:12px; text-align:right; padding-right:6px;}
+.preset-row{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;}
+/* ---------- keychain ---------- */
+.charm-stage{display:flex; justify-content:center; padding:20px 0;}
+.charm{transition:transform .2s; cursor:pointer;}
+.charm.shake{animation:shk .5s ease;}
+@keyframes shk{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}}
+/* ---------- stitch grid ---------- */
+.stitch-board{display:grid; gap:0; margin:12px auto; width:fit-content; background:#fffdf9; border:2px solid rgba(26,26,26,.2); border-radius:10px; padding:10px;}
+.stitch-board .hole{width:22px; height:22px; border-radius:50%; background:radial-gradient(circle, rgba(26,26,26,.18) 2.5px, transparent 3px); cursor:pointer; position:relative; padding:0; border:none;}
+.stitch-board .hole .x{position:absolute; inset:1px; pointer-events:none;}
+.counter{font-family:'Special Elite',monospace; font-size:14px; text-align:center; margin:8px 0;}
+/* ---------- seal / parcel ---------- */
+.parcel{
+  width:280px; height:200px; margin:24px auto; border-radius:10px; position:relative;
+  box-shadow:var(--shadow); border:2px solid rgba(26,26,26,.15);
+  display:flex; align-items:center; justify-content:center;
+}
+.parcel .tape-strip{
+  position:absolute; top:0; bottom:0; left:50%; width:56px; transform:translateX(-50%) rotate(1deg);
+  opacity:.92; border-left:1px dashed rgba(26,26,26,.2); border-right:1px dashed rgba(26,26,26,.2);
+}
+.parcel .to-name{position:relative; z-index:2; font-family:'Pinyon Script',cursive; font-size:38px; transform:rotate(-4deg);}
+/* torn receipt */
+.receipt{
+  background:#fffdf9; margin:26px auto; max-width:420px; padding:22px 22px 30px; position:relative;
+  font-family:'Special Elite',monospace; font-size:14px;
+  --zig:12px;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - var(--zig)),95% 100%,90% calc(100% - var(--zig)),85% 100%,80% calc(100% - var(--zig)),75% 100%,70% calc(100% - var(--zig)),65% 100%,60% calc(100% - var(--zig)),55% 100%,50% calc(100% - var(--zig)),45% 100%,40% calc(100% - var(--zig)),35% 100%,30% calc(100% - var(--zig)),25% 100%,20% calc(100% - var(--zig)),15% 100%,10% calc(100% - var(--zig)),5% 100%,0 calc(100% - var(--zig)));
+}
+.receipt h3{font-family:'Special Elite',monospace; text-align:center; font-size:16px; margin-bottom:12px;}
+.receipt .row{display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted rgba(26,26,26,.25);}
+.linkbox{
+  display:flex; gap:8px; margin:14px 0;
+}
+.linkbox input{
+  flex:1; font-family:'Special Elite',monospace; font-size:12px; padding:10px;
+  border:2px solid rgba(26,26,26,.25); border-radius:8px; background:var(--cream); min-width:0;
+}
+/* ---------- open / burst ---------- */
+.burst-wrap{text-align:center; padding:30px 0;}
+.parcel.big{width:300px; height:220px; cursor:pointer; transition:transform .15s;}
+.parcel.big:active{transform:scale(.96);}
+.gift-burst{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:20px 0;}
+.burst-item{
+  width:74px; height:74px; border-radius:16px; background:var(--white); border:2px solid var(--ink);
+  display:flex; align-items:center; justify-content:center; font-size:34px; cursor:pointer;
+  box-shadow:var(--shadow); animation:pop .45s cubic-bezier(.2,1.6,.4,1) backwards;
+}
+@keyframes pop{from{transform:scale(0) rotate(-30deg);} to{transform:scale(1) rotate(0);}}
+.burst-item.sel{outline:4px solid var(--pink-d);}
+.viewer{margin:18px 0;}
+.kv{font-family:'Special Elite',monospace; font-size:13px; color:var(--ink-soft);}
+/* ---------- misc ---------- */
+.hero{text-align:center; padding:44px 0 10px;}
+.wordmark{font-family:'Pinyon Script',cursive; font-size:clamp(58px,15vw,110px); line-height:1; margin:6px 0;}
+.tagline{font-family:'Special Elite',monospace; font-size:14px; color:var(--ink-soft); margin:10px 0 26px;}
+.poem{font-size:17px; max-width:440px; margin:0 auto 30px; color:var(--ink-soft);}
+.poem em{font-style:normal; border-bottom:2px solid var(--pink-d);}
+.steps{display:flex; flex-direction:column; gap:14px; margin:26px 0;}
+.step{display:flex; gap:14px; align-items:flex-start; text-align:left;}
+.step .n{
+  flex:0 0 40px; height:40px; border-radius:50%; background:var(--tan); border:2px solid var(--ink);
+  display:flex; align-items:center; justify-content:center; font-weight:600; font-size:18px;
+}
+.step p{margin:2px 0 0;}
+footer.site{text-align:center; padding:40px 0 10px; font-family:'Special Elite',monospace; font-size:12px; color:var(--ink-soft);}
+.dotted-hr{border:none; border-top:3px dotted rgba(26,26,26,.25); margin:26px 0;}
+.hidden{display:none !important;}
+.center{text-align:center;}
+.mt{margin-top:18px;} .mb{margin-bottom:18px;}
+.note{font-family:'Special Elite',monospace; font-size:13px; background:var(--tan); border-radius:10px; padding:12px 16px; margin:14px 0;}
+.lost{text-align:center; padding:60px 0;}
+.lost .big{font-size:64px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+/* ============================================================
+   choti khushi — a tiny parcel of joy, made slowly by hand.
+   original work. single-file SPA. no backend: the whole parcel
+   lives in the url hash as compact base64 json.
+   ============================================================ */
+/* ---------- tiny codec: parcel -> base64url hash ---------- */
+function encodeParcel(p){
+  var json = JSON.stringify(p);
+  var b64 = btoa(unescape(encodeURIComponent(json)));
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeParcel(s){
+  try{
+    var b64 = s.replace(/-/g,'+').replace(/_/g,'/');
+    while(b64.length % 4) b64 += '=';
+    var json = decodeURIComponent(escape(atob(b64)));
+    var p = JSON.parse(json);
+    if(!p || typeof p !== 'object' || !Array.isArray(p.gifts)) throw new Error('shape');
+    return p;
+  }catch(e){ return null; }
+}
+/* ---------- utils ---------- */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function $(sel, el){ return (el||document).querySelector(sel); }
+function $all(sel, el){ return Array.prototype.slice.call((el||document).querySelectorAll(sel)); }
+function fmtSecs(s){ s=Math.max(0,Math.round(s)); if(s<60) return s+'s';
+  var m=Math.floor(s/60); return m+'m '+Math.round(s%60)+'s'; }
+var GIFT_META = {
+  l:{name:'letter',   emoji:'\u2709\uFE0F'},
+  s:{name:'sticker',  emoji:'\u2B50'},
+  t:{name:'tune',     emoji:'\uD83C\uDFB5'},
+  k:{name:'keychain', emoji:'\uD83D\uDD11'},
+  h:{name:'stitch',   emoji:'\uD83E\uDDF5'}
+};
+/* ---------- draft state (the parcel being made) ---------- */
+var Draft = {
+  to:'', from:'', wrap:0, tape:0,
+  gifts:[],            // [{t:'l', d:{...}}]
+  times:{},            // {l: secondsSpent}
+  _t0:null,
+  gift:function(t){ for(var i=0;i<this.gifts.length;i++) if(this.gifts[i].t===t) return this.gifts[i]; return null; },
+  upsert:function(t,d){ var g=this.gift(t); if(g){g.d=d;} else {this.gifts.push({t:t,d:d});} },
+  remove:function(t){ this.gifts=this.gifts.filter(function(g){return g.t!==t;}); delete this.times[t]; },
+  startTimer:function(){ this._t0=Date.now(); },
+  stopTimer:function(t){ if(this._t0==null) return;
+    var s=(Date.now()-this._t0)/1000; this.times[t]=(this.times[t]||0)+s; this._t0=null; }
+};
+/* palette shared by makers */
+var INKS = ['#1a1a1a','#d94f5c','#e8912d','#3f8f5f','#3b6fd4','#8a5fc0'];
+var INK_NAMES = ['ink','rose','marigold','leaf','river','jamun'];
+var ENVS = [
+  {n:'blush',  c:'#f2c9ce'},
+  {n:'mint',   c:'#c4e3cb'},
+  {n:'butter', c:'#f2e3b3'},
+  {n:'sky',    c:'#c3d9ec'},
+  {n:'kraft',  c:'#c9a06b'}
+];
+var PAPERS = [
+  {n:'kraft paper', c:'#c9a06b'},
+  {n:'cream',       c:'#f4eee3'},
+  {n:'rose',        c:'#f2c9ce'},
+  {n:'sage',        c:'#c4e3cb'}
+];
+var TAPES = [
+  {n:'gingham rose', css:'repeating-linear-gradient(45deg,#f2c9ce 0 10px,#fffdf9 10px 20px)'},
+  {n:'mint dots',    css:'radial-gradient(circle at 8px 8px, #8fbf9a 5px, #f4eee3 6px)'},
+  {n:'kraft plain',  css:'#b98d5e'},
+  {n:'ink stripe',   css:'repeating-linear-gradient(90deg,#1a1a1a 0 8px,#f4eee3 8px 16px)'}
+];
+/* ---------- router ---------- */
+function route(){
+  var h = location.hash || '#/';
+  if(h.indexOf('#/b/')===0){ renderOpen(h.slice(4)); return; }
+  if(h === '#/make'){ renderMake(); return; }
+  if(h === '#/seal'){ renderSeal(); return; }
+  if(h === '#/sent'){ renderSent(); return; }
+  renderHome();
+}
+window.addEventListener('hashchange', route);
+/* ============================================================
+   VIEW: home
+   ============================================================ */
+function renderHome(){
+  var app = $('#app');
+  app.innerHTML =
+  '<div class="hero">'+
+    '<div class="type" style="font-size:13px;letter-spacing:.2em;">a tiny internet parcel</div>'+
+    '<div class="wordmark">choti khushi</div>'+
+    '<div class="tagline">a tiny parcel of joy, made slowly by hand</div>'+
+  '</div>'+
+  '<div class="card tilt-l"><div class="tape"></div>'+
+    '<p class="poem" style="margin:6px 0;">some feelings don\'t fit in a text message.<br>'+
+    'so here — <em>make something small</em>, with your own hands:<br>'+
+    'a letter folded with care, a sticker you drew,<br>a tune you tapped out, a keychain, a stitched heart.<br><br>'+
+    'seal it in a paper parcel.<br>send the link.<br>let someone open a little joy.</p>'+
+  '</div>'+
+  '<div class="steps">'+
+    '<div class="step"><div class="n">1</div><p><b>make</b> — pick 1 to 5 tiny gifts and craft each one in a little maker game. no skill needed, only love.</p></div>'+
+    '<div class="step"><div class="n">2</div><p><b>seal</b> — choose the paper & tape, write their name on the parcel in ink.</p></div>'+
+    '<div class="step"><div class="n">3</div><p><b>send</b> — get a link. everything you made travels inside it. no account, no app, free forever.</p></div>'+
+  '</div>'+
+  '<div class="center mt"><a class="btn" href="#/make">make a parcel</a></div>'+
+  '<div class="center mt"><a class="type" style="font-size:13px;" href="#/b/'+sampleParcel()+'">or peek at a sample parcel &rarr;</a></div>'+
+  '<footer class="site">made slowly by hand · choti khushi · free forever</footer>';
+  window.scrollTo(0,0);
+}
+/* a tiny pre-made sample parcel so visitors can try "open" */
+function sampleParcel(){
+  var p = { to:'you', from:'a friend', wrap:0, tape:0, gifts:[
+    {t:'l', d:{e:0, x:'hello, you.\n\nthis is a sample parcel —\nimagine it was made just for you.\n\nwith love.'}},
+    {t:'t', d:{g:presetGrid('happy')}},
+    {t:'h', d:{m:2, x:motifStitches(2, 4)}}
+  ]};
+  return encodeParcel(p);
+}
+/* ============================================================
+   VIEW: make
+   ============================================================ */
+function renderMake(){
+  var app = $('#app');
+  var cards = ['l','s','t','k','h'].map(function(t){
+    var m = GIFT_META[t], done = !!Draft.gift(t);
+    var mins = {l:'~2 min', s:'~3 min', t:'~2 min', k:'~2 min', h:'~4 min'}[t];
+    return '<div class="gift-card">'+
+      '<span class="emoji">'+m.emoji+'</span><h3>'+m.name+'</h3>'+
+      '<button class="pill-cta'+(done?' done':'')+'" data-maker="'+t+'">'+(done?'\u2713 done — redo':'+ '+m.name)+'</button>'+
+      '<span class="mins">'+mins+' of slow making</span>'+
+    '</div>';
+  }).join('');
+  app.innerHTML =
+  '<div class="center" style="padding:26px 0 6px;">'+
+    '<div class="type" style="font-size:12px;letter-spacing:.2em;">the making table</div>'+
+    '<h1 style="font-size:34px;">make your parcel</h1>'+
+  '</div>'+
+  '<div class="card tilt-r"><div class="tape"></div>'+
+    '<div class="field"><label>this parcel is for…</label>'+
+    '<input type="text" id="f-to" maxlength="24" placeholder="their name" value="'+esc(Draft.to)+'"></div>'+
+    '<div class="field"><label>…made with love by</label>'+
+    '<input type="text" id="f-from" maxlength="24" placeholder="your name" value="'+esc(Draft.from)+'"></div>'+
+  '</div>'+
+  '<p class="type center" style="font-size:13px;margin:20px 0 4px;">pick 1 to 5 tiny gifts to hand-make:</p>'+
+  '<div class="gift-grid">'+cards+'</div>'+
+  '<div class="center mt mb">'+
+    '<a class="btn ghost" href="#/" style="margin-right:8px;">&larr; home</a> '+
+    '<button class="btn" id="btn-seal" '+(Draft.gifts.length?'':'disabled')+'>seal it &rarr;</button>'+
+  '</div>'+
+  '<div id="modal-root"></div>'+
+  '<footer class="site">made slowly by hand · choti khushi</footer>';
+  $('#f-to').addEventListener('input', function(e){ Draft.to = e.target.value; });
+  $('#f-from').addEventListener('input', function(e){ Draft.from = e.target.value; });
+  $all('[data-maker]').forEach(function(b){
+    b.addEventListener('click', function(){ openMaker(b.getAttribute('data-maker')); });
+  });
+  $('#btn-seal').addEventListener('click', function(){
+    if(!Draft.gifts.length) return;
+    if(!Draft.to.trim()){ Draft.to = 'someone lovely'; }
+    location.hash = '#/seal';
+  });
+  window.scrollTo(0,0);
+}
+function refreshMakeButtons(){
+  $all('[data-maker]').forEach(function(b){
+    var t = b.getAttribute('data-maker'), done = !!Draft.gift(t);
+    b.className = 'pill-cta' + (done ? ' done' : '');
+    b.textContent = done ? '\u2713 done \u2014 redo' : '+ ' + GIFT_META[t].name;
+  });
+  var sb = $('#btn-seal'); if(sb) sb.disabled = !Draft.gifts.length;
+}
+/* ---------- modal shell ---------- */
+function openModal(title, hint, bodyHTML){
+  var root = $('#modal-root');
+  root.innerHTML =
+  '<div class="modal-back" id="mback"><div class="modal" role="dialog">'+
+    '<button class="x" id="mx" aria-label="close">&times;</button>'+
+    '<h2>'+title+'</h2><div class="hint">'+hint+'</div>'+
+    '<div id="mbody">'+bodyHTML+'</div>'+
+  '</div></div>';
+  var close = function(){ root.innerHTML=''; };
+  $('#mx').addEventListener('click', close);
+  $('#mback').addEventListener('click', function(e){ if(e.target.id==='mback') close(); });
+  return close;
+}
+function makerFooter(t){
+  return '<hr class="dotted-hr"><div class="center">'+
+    '<button class="btn small ghost" id="m-clear" style="margin-right:8px;">start over</button>'+
+    '<button class="btn small pink" id="m-save">wrap this gift \u2713</button></div>';
+}
+/* ============================================================
+   MAKER: letter
+   ============================================================ */
+function openMaker(t){
+  Draft.startTimer();
+  if(t==='l') makerLetter();
+  else if(t==='s') makerSticker();
+  else if(t==='t') makerTune();
+  else if(t==='k') makerKeychain();
+  else if(t==='h') makerStitch();
+}
+function makerLetter(){
+  var g = Draft.gift('l'), env = g?g.d.e:0, text = g?g.d.x:'';
+  var sw = ENVS.map(function(e,i){
+    return '<div class="swatch'+(i===env?' sel':'')+'" data-env="'+i+'" title="'+e.n+'" style="background:'+e.c+'"></div>';
+  }).join('');
+  var close = openModal('\u2709\uFE0F the letter', 'tap the envelope to open it. write slowly.',
+    '<div class="env-wrap" id="envw"><div class="env-body" id="envb"></div>'+
+    '<div class="env-letter"><div class="mini" id="envmini"></div></div>'+
+    '<div class="env-flap" id="envf"></div></div>'+
+    '<div class="type center" style="font-size:12px;">pick an envelope colour:</div>'+
+    '<div class="swatches" style="justify-content:center;">'+sw+'</div>'+
+    '<textarea class="ruled" id="ltext" maxlength="600" placeholder="dear you,\n\nwrite it like you mean it…">'+esc(text)+'</textarea>'+
+    makerFooter('l'));
+  var paint = function(){ $('#envb').style.background = ENVS[env].c; $('#envf').style.background = ENVS[env].c; };
+  var mini = function(){ $('#envmini').textContent = ($('#ltext').value || '(empty)').slice(0,120); };
+  paint(); mini();
+  $('#envw').addEventListener('click', function(){ this.classList.toggle('open'); });
+  $all('[data-env]').forEach(function(s){
+    s.addEventListener('click', function(){
+      env = +s.getAttribute('data-env');
+      $all('[data-env]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel'); paint();
+    });
+  });
+  $('#ltext').addEventListener('input', mini);
+  $('#m-clear').addEventListener('click', function(){ $('#ltext').value=''; mini(); });
+  $('#m-save').addEventListener('click', function(){
+    var x = $('#ltext').value.trim();
+    if(!x){ alert('write a little something first \u2661'); return; }
+    Draft.upsert('l', {e:env, x:x}); Draft.stopTimer('l');
+    close(); refreshMakeButtons();
+  });
+}
+/* ============================================================
+   MAKER: sticker (draw -> peel -> finish)
+   ============================================================ */
+function makerSticker(){
+  var g = Draft.gift('s');
+  var sw = INKS.map(function(c,i){
+    return '<div class="swatch'+(i===0?' sel':'')+'" data-ink="'+i+'" title="'+INK_NAMES[i]+'" style="background:'+c+'"></div>';
+  }).join('');
+  var close = openModal('\u2B50 the sticker', 'draw something small. then peel it.',
+    '<div class="draw-tools">'+
+      '<div class="swatches" style="margin:0;">'+sw+'</div>'+
+      '<div style="display:flex;gap:6px;align-items:center;margin-left:auto;">'+
+        [4,8,14].map(function(z,i){
+          return '<div class="brushdot'+(i===1?'':'')+'" data-z="'+z+'" title="brush" style="width:'+(14+z)+'px;height:'+(14+z)+'px;'+(i===1?'box-shadow:0 0 0 3px var(--pink-d);':'')+'"></div>';
+        }).join('')+
+        '<button class="pill-cta" id="s-undo" style="margin-left:6px;">undo</button>'+
+      '</div>'+
+    '</div>'+
+    '<canvas class="draw" id="scv" width="440" height="330"></canvas>'+
+    '<div class="type center" style="font-size:12px;margin-top:8px;">peel it &amp; pick a finish:</div>'+
+    '<div class="swatches" style="justify-content:center;" id="s-finish">'+
+      '<div class="swatch sel" data-fin="0" title="matte" style="background:#e8e2d2;"></div>'+
+      '<div class="swatch" data-fin="1" title="gloss" style="background:linear-gradient(115deg,#fff,#cfd8e3);"></div>'+
+      '<div class="swatch" data-fin="2" title="holo" style="background:linear-gradient(115deg,#f9b8d0,#a8dcf0,#f7e9a0,#b8e6b8);"></div>'+
+    '</div>'+
+    '<div class="center"><div class="diecut"><canvas id="sprev" width="220" height="165"></canvas><div class="shine" id="sshine"></div></div></div>'+
+    '<div class="type center" style="font-size:12px;">die-cut preview</div>'+
+    makerFooter('s'));
+  var cv = $('#scv'), ctx = cv.getContext('2d');
+  var ink = 0, brush = 8, strokes = [], cur = null, finish = 0;
+  if(g){ try{ strokes = JSON.parse(JSON.stringify(g.d.w)); }catch(e){} finish = g.d.f||0;
+    $all('#s-finish .swatch').forEach(function(x){ x.classList.toggle('sel', +x.getAttribute('data-fin')===finish); });
+  }
+  function redraw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    strokes.forEach(function(st){ drawStroke(ctx, st, 1); });
+    if(cur) drawStroke(ctx, cur, 1);
+    preview();
+  }
+  function drawStroke(c, st, scale){
+    c.strokeStyle = INKS[st.c]; c.lineWidth = st.z*scale; c.lineCap='round'; c.lineJoin='round';
+    c.beginPath();
+    st.p.forEach(function(pt,i){ var x=pt[0]/100*cv.width*scale, y=pt[1]/100*cv.height*scale;
+      if(i===0) c.moveTo(x,y); else c.lineTo(x,y); });
+    if(st.p.length===1){ var x=st.p[0][0]/100*cv.width*scale, y=st.p[0][1]/100*cv.height*scale;
+      c.fillStyle=INKS[st.c]; c.beginPath(); c.arc(x,y,st.z*scale/2,0,7); c.fill(); }
+    else c.stroke();
+  }
+  function preview(){
+    var p = $('#sprev'), pc = p.getContext('2d');
+    pc.clearRect(0,0,p.width,p.height);
+    // die-cut: thick white under-stroke, then colour on top
+    strokes.forEach(function(st){
+      pc.strokeStyle='#fffdf9'; pc.lineWidth=(st.z+7)*0.5; pc.lineCap='round'; pc.lineJoin='round';
+      pc.beginPath();
+      st.p.forEach(function(pt,i){ var x=pt[0]/100*p.width, y=pt[1]/100*p.height;
+        if(i===0) pc.moveTo(x,y); else pc.lineTo(x,y); });
+      if(st.p.length>1) pc.stroke();
+      else { pc.fillStyle='#fffdf9'; pc.beginPath(); pc.arc(st.p[0][0]/100*p.width, st.p[0][1]/100*p.height, (st.z+7)*0.25, 0, 7); pc.fill(); }
+    });
+    strokes.forEach(function(st){ drawStrokeScaled(pc, st, p.width, p.height); });
+    var sh = $('#sshine');
+    sh.className = 'shine' + (finish===1?' gloss':finish===2?' holo':'');
+  }
+  function drawStrokeScaled(c, st, W, H){
+    c.strokeStyle = INKS[st.c]; c.lineWidth = st.z*0.5; c.lineCap='round'; c.lineJoin='round';
+    c.beginPath();
+    st.p.forEach(function(pt,i){ var x=pt[0]/100*W, y=pt[1]/100*H;
+      if(i===0) c.moveTo(x,y); else c.lineTo(x,y); });
+    if(st.p.length===1){ c.fillStyle=INKS[st.c]; c.beginPath();
+      c.arc(st.p[0][0]/100*W, st.p[0][1]/100*H, st.z*0.25, 0, 7); c.fill(); }
+    else c.stroke();
+  }
+  function pos(e){
+    var r = cv.getBoundingClientRect();
+    var cx = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+    var cy = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+    return [ Math.round((cx-r.left)/r.width*100), Math.round((cy-r.top)/r.height*100) ];
+  }
+  cv.addEventListener('pointerdown', function(e){ e.preventDefault();
+    cur = {c:ink, z:brush, p:[pos(e)]}; cv.setPointerCapture(e.pointerId); redraw(); });
+  cv.addEventListener('pointermove', function(e){ if(!cur) return;
+    var p = pos(e), last = cur.p[cur.p.length-1];
+    if(Math.abs(p[0]-last[0])+Math.abs(p[1]-last[1]) > 0){ cur.p.push(p); redraw(); } });
+  var endStroke = function(){ if(cur){ if(cur.p.length) strokes.push(cur); cur=null; redraw(); } };
+  cv.addEventListener('pointerup', endStroke); cv.addEventListener('pointercancel', endStroke);
+  $all('[data-ink]').forEach(function(s){ s.addEventListener('click', function(){
+    ink = +s.getAttribute('data-ink');
+    $all('[data-ink]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel'); }); });
+  $all('[data-z]').forEach(function(b){ b.addEventListener('click', function(){
+    brush = +b.getAttribute('data-z');
+    $all('[data-z]').forEach(function(x){x.style.boxShadow='';}); b.style.boxShadow='0 0 0 3px var(--pink-d)'; }); });
+  $('#s-undo').addEventListener('click', function(){ strokes.pop(); redraw(); });
+  $all('#s-finish .swatch').forEach(function(s){ s.addEventListener('click', function(){
+    finish = +s.getAttribute('data-fin');
+    $all('#s-finish .swatch').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel'); preview(); }); });
+  $('#m-clear').addEventListener('click', function(){ strokes=[]; redraw(); });
+  $('#m-save').addEventListener('click', function(){
+    if(!strokes.length){ alert('draw something first \u2661'); return; }
+    Draft.upsert('s', {w:strokes, f:finish}); Draft.stopTimer('s');
+    close(); refreshMakeButtons();
+  });
+  redraw();
+}
+/* ============================================================
+   MAKER: tune (16-step x 5-note sequencer, webaudio)
+   ============================================================ */
+var TUNE_NOTES = [
+  {n:'A', f:440.00}, {n:'G', f:392.00}, {n:'E', f:329.63}, {n:'D', f:293.66}, {n:'C', f:261.63}
+];
+function presetGrid(which){
+  var bits = new Array(80).fill('0');
+  var set = function(step, notes){ notes.forEach(function(n){ bits[step*5+n]='1'; }); };
+  if(which==='happy'){ set(0,[4]); set(2,[2]); set(4,[0]); set(6,[2]); set(8,[4]); set(10,[2]); set(12,[0]); set(14,[4]); }
+  else if(which==='sleepy'){ set(0,[4]); set(4,[3]); set(8,[2]); set(12,[4]); }
+  else if(which==='sunny'){ set(0,[0]); set(2,[1]); set(4,[2]); set(6,[1]); set(8,[0]); set(10,[4]); set(12,[2]); set(14,[0]); }
+  return bits.join('');
+}
+function makerTune(){
+  var g = Draft.gift('t');
+  var grid = (g ? g.d.g : presetGrid('happy')).split('');
+  while(grid.length<80) grid.push('0');
+  var close = openModal('\uD83C\uDFB5 the tune', 'tap the squares. press play. make a tiny song.',
+    '<div class="seq-labels" id="seqlab"></div>'+
+    '<div class="preset-row">'+
+      '<button class="pill-cta" data-preset="happy">happy</button>'+
+      '<button class="pill-cta" data-preset="sleepy">sleepy</button>'+
+      '<button class="pill-cta" data-preset="sunny">sunny</button>'+
+      '<button class="pill-cta" id="t-clear2">clear</button>'+
+      '<button class="pill-cta" id="t-play" style="margin-left:auto;background:var(--mint);">\u25B6 play</button>'+
+    '</div>'+
+    makerFooter('t'));
+  var lab = $('#seqlab');
+  var html = '';
+  TUNE_NOTES.forEach(function(note, ni){
+    html += '<div class="nl">'+note.n+'</div><div class="seq" data-row="'+ni+'">';
+    for(var s=0;s<16;s++) html += '<button class="cell" data-s="'+s+'"></button>';
+    html += '</div>';
+  });
+  lab.innerHTML = html;
+  var paint = function(){
+    $all('#seqlab .seq').forEach(function(rowEl){
+      var ni = +rowEl.getAttribute('data-row');
+      $all('.cell', rowEl).forEach(function(c){
+        var s = +c.getAttribute('data-s');
+        c.classList.toggle('on', grid[s*5+ni]==='1');
+      });
+    });
+  };
+  paint();
+  $all('#seqlab .cell').forEach(function(c){
+    c.addEventListener('click', function(){
+      var rowEl = c.parentElement, ni = +rowEl.getAttribute('data-row'), s = +c.getAttribute('data-s');
+      var i = s*5+ni; grid[i] = grid[i]==='1' ? '0' : '1'; paint();
+      if(grid[i]==='1') blip(TUNE_NOTES[ni].f, 0.18);
+    });
+  });
+  $all('[data-preset]').forEach(function(b){
+    b.addEventListener('click', function(){ grid = presetGrid(b.getAttribute('data-preset')).split(''); paint(); });
+  });
+  $('#t-clear2').addEventListener('click', function(){ grid = new Array(80).fill('0'); paint(); stopTune(); });
+  var playing = false, timer = null, step = 0;
+  window.stopTune = function(){ playing=false; if(timer) clearInterval(timer); timer=null;
+    $all('#seqlab .cell.playing').forEach(function(c){c.classList.remove('playing');});
+    var p=$('#t-play'); if(p) p.innerHTML='\u25B6 play'; };
+  $('#t-play').addEventListener('click', function(){
+    if(playing){ stopTune(); return; }
+    playing = true; step = 0; this.innerHTML = '\u25A0 stop';
+    ensureAudio();
+    timer = setInterval(function(){
+      $all('#seqlab .cell.playing').forEach(function(c){c.classList.remove('playing');});
+      for(var ni=0; ni<5; ni++){
+        if(grid[step*5+ni]==='1'){
+          blip(TUNE_NOTES[ni].f, 0.22);
+          var rowEl = $all('#seqlab .seq')[ni];
+          var cell = $all('.cell', rowEl)[step];
+          if(cell) cell.classList.add('playing');
+        }
+      }
+      step = (step+1)%16;
+    }, 240);
+  });
+  $('#m-clear').addEventListener('click', function(){ grid = new Array(80).fill('0'); paint(); stopTune(); });
+  $('#m-save').addEventListener('click', function(){
+    if(grid.join('').indexOf('1')<0){ alert('tap a few squares first \u2661'); return; }
+    stopTune(); Draft.upsert('t', {g:grid.join('')}); Draft.stopTimer('t');
+    close(); refreshMakeButtons();
+  });
+  // stop playback if modal closes via X
+  var obs = new MutationObserver(function(){ if(!$('#mbody')) stopTune(); });
+  obs.observe($('#modal-root'), {childList:true});
+}
+/* --- tiny webaudio --- */
+var _ac = null;
+function ensureAudio(){ if(!_ac){ try{ _ac = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if(_ac && _ac.state==='suspended') _ac.resume(); }
+function blip(freq, dur){
+  ensureAudio(); if(!_ac) return;
+  var o = _ac.createOscillator(), gn = _ac.createGain();
+  o.type = 'triangle'; o.frequency.value = freq;
+  gn.gain.setValueAtTime(0.0001, _ac.currentTime);
+  gn.gain.exponentialRampToValueAtTime(0.5, _ac.currentTime+0.02);
+  gn.gain.exponentialRampToValueAtTime(0.0001, _ac.currentTime+dur);
+  o.connect(gn); gn.connect(_ac.destination);
+  o.start(); o.stop(_ac.currentTime+dur+0.05);
+}
+/* ============================================================
+   MAKER: keychain
+   ============================================================ */
+var CHARM_SHAPES = ['oval','rectangle'];
+var RESINS = [
+  {n:'rose milk', c:'#f2c9ce'}, {n:'mint tea', c:'#c4e3cb'},
+  {n:'honey', c:'#f2ddab'}, {n:'sky', c:'#c3d9ec'}, {n:'clear', c:'#efe9dc'}
+];
+var FILLINGS = ['stars','hearts','sprinkles'];
+function makerKeychain(){
+  var g = Draft.gift('k');
+  var shape = g?g.d.s:0, resin = g?g.d.r:0, fill = g?g.d.f:0;
+  var emboss = g?JSON.parse(JSON.stringify(g.d.e||[])):[];
+  var close = openModal('\uD83D\uDD11 the keychain', 'pick a charm, pour the resin, press the foil. tap it to shake.',
+    '<div class="charm-stage"><svg class="charm" id="charm" width="170" height="210" viewBox="0 0 170 210"></svg></div>'+
+    '<div class="type" style="font-size:12px;">charm shape:</div>'+
+    '<div class="preset-row">'+CHARM_SHAPES.map(function(s,i){
+      return '<button class="pill-cta'+(i===shape?' done':'')+'" data-shape="'+i+'">'+s+'</button>';}).join('')+'</div>'+
+    '<div class="type" style="font-size:12px;">resin colour:</div>'+
+    '<div class="swatches">'+RESINS.map(function(r,i){
+      return '<div class="swatch'+(i===resin?' sel':'')+'" data-resin="'+i+'" title="'+r.n+'" style="background:'+r.c+'"></div>';}).join('')+'</div>'+
+    '<div class="type" style="font-size:12px;">filling:</div>'+
+    '<div class="preset-row">'+FILLINGS.map(function(f,i){
+      return '<button class="pill-cta'+(i===fill?' done':'')+'" data-fill="'+i+'">'+f+'</button>';}).join('')+'</div>'+
+    '<div class="type" style="font-size:12px;">press the foil — draw shiny lines on the charm:</div>'+
+    '<canvas class="draw" id="kcv" width="340" height="200" style="margin-top:8px;"></canvas>'+
+    '<div class="center mt"><button class="pill-cta" id="k-shake">shake it!</button> '+
+    '<button class="pill-cta" id="k-unfoil">wipe foil</button></div>'+
+    makerFooter('k'));
+  var svg = $('#charm');
+  function drawCharm(){
+    var w = shape===0 ? 120 : 130, h = shape===0 ? 130 : 110;
+    var cx = 85, cy = 105;
+    var shapeEl = shape===0
+      ? '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(w/2)+'" ry="'+(h/2)+'" />'
+      : '<rect x="'+(cx-w/2)+'" y="'+(cy-h/2)+'" width="'+w+'" height="'+h+'" rx="18" />';
+    var deco = '';
+    var fx = FILLINGS[fill];
+    for(var i=0;i<7;i++){
+      var px = cx-w/2+14+ (i*37)%(w-28), py = cy-h/2+16+ (i*53)%(h-32);
+      if(fx==='stars') deco += '<text x="'+px+'" y="'+py+'" font-size="15" text-anchor="middle">\u2B50</text>';
+      else if(fx==='hearts') deco += '<text x="'+px+'" y="'+py+'" font-size="14" text-anchor="middle">\uD83D\uDC96</text>';
+      else deco += '<circle cx="'+px+'" cy="'+py+'" r="3.5" fill="'+INKS[i%INKS.length]+'" opacity=".8"/>';
+    }
+    svg.innerHTML =
+      '<circle cx="85" cy="18" r="9" fill="none" stroke="#1a1a1a" stroke-width="4"/>'+
+      '<line x1="85" y1="27" x2="85" y2="'+(cy-h/2)+'" stroke="#1a1a1a" stroke-width="4"/>'+
+      '<g fill="'+RESINS[resin].c+'" stroke="#1a1a1a" stroke-width="3">'+shapeEl+'</g>'+
+      '<g>'+deco+'</g>'+
+      '<g fill="none" stroke="#fffdf9" stroke-width="3" stroke-linecap="round" opacity=".85">'+
+        emboss.map(function(st){
+          return '<path d="M'+st.p.map(function(p){return (p[0]/100*170)+' '+(p[1]/100*210);}).join(' L')+'"/>';
+        }).join('')+
+      '</g>';
+  }
+  drawCharm();
+  svg.addEventListener('click', function(){ svg.classList.remove('shake'); void svg.offsetWidth; svg.classList.add('shake'); });
+  $('#k-shake').addEventListener('click', function(){ svg.classList.remove('shake'); void svg.offsetWidth; svg.classList.add('shake'); });
+  $all('[data-shape]').forEach(function(b){ b.addEventListener('click', function(){
+    shape=+b.getAttribute('data-shape');
+    $all('[data-shape]').forEach(function(x){x.classList.remove('done');}); b.classList.add('done'); drawCharm(); }); });
+  $all('[data-resin]').forEach(function(s){ s.addEventListener('click', function(){
+    resin=+s.getAttribute('data-resin');
+    $all('[data-resin]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel'); drawCharm(); }); });
+  $all('[data-fill]').forEach(function(b){ b.addEventListener('click', function(){
+    fill=+b.getAttribute('data-fill');
+    $all('[data-fill]').forEach(function(x){x.classList.remove('done');}); b.classList.add('done'); drawCharm(); }); });
+  // foil canvas -> draw emboss lines, mirrored onto svg
+  var kcv = $('#kcv'), kx = kcv.getContext('2d'), cur = null;
+  function kpos(e){
+    var r = kcv.getBoundingClientRect();
+    var cx=(e.touches&&e.touches[0])?e.touches[0].clientX:e.clientX;
+    var cy=(e.touches&&e.touches[0])?e.touches[0].clientY:e.clientY;
+    return [Math.round((cx-r.left)/r.width*100), Math.round((cy-r.top)/r.height*100)];
+  }
+  function kredraw(){
+    kx.clearRect(0,0,kcv.width,kcv.height);
+    kx.strokeStyle='#d9b25f'; kx.lineWidth=4; kx.lineCap='round';
+    emboss.forEach(function(st){ kx.beginPath();
+      st.p.forEach(function(p,i){ var x=p[0]/100*kcv.width, y=p[1]/100*kcv.height;
+        if(i===0)kx.moveTo(x,y); else kx.lineTo(x,y); }); kx.stroke(); });
+    if(cur){ kx.beginPath();
+      cur.p.forEach(function(p,i){ var x=p[0]/100*kcv.width, y=p[1]/100*kcv.height;
+        if(i===0)kx.moveTo(x,y); else kx.lineTo(x,y); }); kx.stroke(); }
+  }
+  kcv.addEventListener('pointerdown', function(e){ e.preventDefault(); cur={p:[kpos(e)]}; kcv.setPointerCapture(e.pointerId); kredraw(); });
+  kcv.addEventListener('pointermove', function(e){ if(cur){ cur.p.push(kpos(e)); kredraw(); } });
+  var kend = function(){ if(cur){ emboss.push(cur); cur=null; kredraw(); drawCharm(); } };
+  kcv.addEventListener('pointerup', kend); kcv.addEventListener('pointercancel', kend);
+  $('#k-unfoil').addEventListener('click', function(){ emboss=[]; kredraw(); drawCharm(); });
+  $('#m-clear').addEventListener('click', function(){ shape=0;resin=0;fill=0;emboss=[]; kredraw(); drawCharm();
+    $all('[data-shape]').forEach(function(x,i){x.classList.toggle('done',i===0);});
+    $all('[data-fill]').forEach(function(x,i){x.classList.toggle('done',i===0);});
+    $all('[data-resin]').forEach(function(x,i){x.classList.toggle('sel',i===0);}); });
+  $('#m-save').addEventListener('click', function(){
+    Draft.upsert('k', {s:shape, r:resin, f:fill, e:emboss}); Draft.stopTimer('k');
+    close(); refreshMakeButtons();
+  });
+  kredraw();
+}
+/* ============================================================
+   MAKER: stitch (cross-stitch grid)
+   ============================================================ */
+var STITCH_MOTIFS = ['free','flower','star','heart'];
+var STITCH_COLORS = ['#d94f5c','#3f8f5f','#3b6fd4','#e8912d','#8a5fc0'];
+function motifStitches(m, colorIdx){
+  // returns [[x,y],...] on a 11x11 grid (x,y 0..10)
+  var pts = [];
+  if(m===1){ // flower
+    [[5,1],[5,2]].forEach(function(p){pts.push(p);});
+    [[3,3],[4,2],[6,2],[7,3],[3,5],[7,5],[4,6],[6,6]].forEach(function(p){pts.push(p);});
+    [[4,4],[5,4],[6,4],[4,5],[5,5],[6,5]].forEach(function(p){pts.push(p);});
+    [[5,7],[5,8],[5,9]].forEach(function(p){pts.push(p);});
+    [[4,8],[6,8]].forEach(function(p){pts.push(p);});
+  } else if(m===2){ // star
+    [[5,1],[5,2],[5,3],[5,7],[5,8],[5,9],
+     [1,5],[2,5],[3,5],[7,5],[8,5],[9,5],
+     [3,3],[4,4],[6,6],[7,7],[7,3],[6,4],[4,6],[3,7],
+     [5,4],[5,5],[5,6],[4,5],[6,5]].forEach(function(p){pts.push(p);});
+  } else if(m===3){ // heart
+    [[2,2],[3,2],[4,3],[6,3],[7,2],[8,2],
+     [2,3],[3,4],[4,5],[5,6],[6,5],[7,4],[8,3],
+     [3,3],[7,3],[4,4],[6,4],[5,5]].forEach(function(p){pts.push(p);});
+  }
+  return pts;
+}
+function makerStitch(){
+  var g = Draft.gift('h');
+  var motif = g?g.d.m:0, colorIdx = 0;
+  var stitches = g?JSON.parse(JSON.stringify(g.d.x)):[]; // [[x,y,c]]
+  var N = 11;
+  var close = openModal('\uD83E\uDDF5 the stitch', 'click the little holes to place a cross-stitch. click a stitch to unpick it.',
+    '<div class="preset-row" style="justify-content:center;">'+STITCH_MOTIFS.map(function(mt,i){
+      return '<button class="pill-cta'+(i===motif?' done':'')+'" data-motif="'+i+'">'+mt+'</button>';}).join('')+'</div>'+
+    '<div class="type center" style="font-size:12px;">thread:</div>'+
+    '<div class="swatches" style="justify-content:center;">'+STITCH_COLORS.map(function(c,i){
+      return '<div class="swatch'+(i===0?' sel':'')+'" data-thread="'+i+'" style="background:'+c+'"></div>';}).join('')+'</div>'+
+    '<div class="stitch-board" id="sboard" style="grid-template-columns:repeat('+N+',22px);"></div>'+
+    '<div class="counter" id="scount"></div>'+
+    makerFooter('h'));
+  var board = $('#sboard');
+  function paint(){
+    board.innerHTML = '';
+    for(var y=0;y<N;y++) for(var x=0;x<N;x++){
+      (function(x,y){
+        var b = document.createElement('button');
+        b.className='hole'; b.setAttribute('aria-label','stitch '+x+','+y);
+        var st = null;
+        for(var i=0;i<stitches.length;i++) if(stitches[i][0]===x&&stitches[i][1]===y){ st=stitches[i]; break; }
+        if(st){
+          var s = document.createElement('span'); s.className='x';
+          var c = STITCH_COLORS[st[2]%STITCH_COLORS.length];
+          s.innerHTML = '<svg viewBox="0 0 20 20" width="18" height="18"><line x1="3" y1="3" x2="17" y2="17" stroke="'+c+'" stroke-width="3.4" stroke-linecap="round"/><line x1="17" y1="3" x2="3" y2="17" stroke="'+c+'" stroke-width="3.4" stroke-linecap="round"/></svg>';
+          b.appendChild(s);
+        }
+        b.addEventListener('click', function(){
+          var idx = -1;
+          for(var i=0;i<stitches.length;i++) if(stitches[i][0]===x&&stitches[i][1]===y){ idx=i; break; }
+          if(idx>=0) stitches.splice(idx,1);        // unpick
+          else stitches.push([x,y,colorIdx]);
+          paint();
+        });
+        board.appendChild(b);
+      })(x,y);
+    }
+    $('#scount').textContent = stitches.length + ' stitches placed';
+  }
+  paint();
+  $all('[data-motif]').forEach(function(b){ b.addEventListener('click', function(){
+    motif = +b.getAttribute('data-motif');
+    $all('[data-motif]').forEach(function(x){x.classList.remove('done');}); b.classList.add('done');
+    if(motif>0){ stitches = motifStitches(motif, colorIdx).map(function(p){ return [p[0],p[1],colorIdx]; }); }
+    else stitches = [];
+    paint(); }); });
+  $all('[data-thread]').forEach(function(s){ s.addEventListener('click', function(){
+    colorIdx = +s.getAttribute('data-thread');
+    $all('[data-thread]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel'); }); });
+  $('#m-clear').addEventListener('click', function(){ stitches=[]; paint(); });
+  $('#m-save').addEventListener('click', function(){
+    if(!stitches.length){ alert('place a few stitches first \u2661'); return; }
+    Draft.upsert('h', {m:motif, x:stitches}); Draft.stopTimer('h');
+    close(); refreshMakeButtons();
+  });
+}
+/* ============================================================
+   VIEW: seal
+   ============================================================ */
+function renderSeal(){
+  if(!Draft.gifts.length){ location.hash='#/make'; return; }
+  var app = $('#app');
+  app.innerHTML =
+  '<div class="center" style="padding:26px 0 6px;">'+
+    '<div class="type" style="font-size:12px;letter-spacing:.2em;">the packing table</div>'+
+    '<h1 style="font-size:34px;">seal the parcel</h1>'+
+  '</div>'+
+  '<div class="parcel" id="parcel" style="background:'+PAPERS[Draft.wrap].c+';">'+
+    '<div class="tape-strip" id="ptape" style="background:'+TAPES[Draft.tape].css+';"></div>'+
+    '<div class="to-name" id="pname">'+esc(Draft.to||'someone lovely')+'</div>'+
+  '</div>'+
+  '<div class="card tilt-l"><div class="tape"></div>'+
+    '<div class="type" style="font-size:13px;">wrapping paper:</div>'+
+    '<div class="swatches">'+PAPERS.map(function(p,i){
+      return '<div class="swatch'+(i===Draft.wrap?' sel':'')+'" data-paper="'+i+'" title="'+p.n+'" style="background:'+p.c+'"></div>';}).join('')+'</div>'+
+    '<div class="type" style="font-size:13px;">tape:</div>'+
+    '<div class="swatches">'+TAPES.map(function(t,i){
+      return '<div class="swatch'+(i===Draft.tape?' sel':'')+'" data-tape="'+i+'" title="'+t.n+'" style="background:'+t.css+';background-size:28px 28px;"></div>';}).join('')+'</div>'+
+    '<div class="kv">inside: '+Draft.gifts.map(function(g){return GIFT_META[g.t].emoji+' '+GIFT_META[g.t].name;}).join(' · ')+'</div>'+
+  '</div>'+
+  '<div class="center mt mb">'+
+    '<a class="btn ghost" href="#/make" style="margin-right:8px;">&larr; make more</a> '+
+    '<button class="btn pink" id="btn-send">send it \u2713</button>'+
+  '</div>'+
+  '<footer class="site">made slowly by hand · choti khushi</footer>';
+  $all('[data-paper]').forEach(function(s){ s.addEventListener('click', function(){
+    Draft.wrap = +s.getAttribute('data-paper');
+    $all('[data-paper]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel');
+    $('#parcel').style.background = PAPERS[Draft.wrap].c; }); });
+  $all('[data-tape]').forEach(function(s){ s.addEventListener('click', function(){
+    Draft.tape = +s.getAttribute('data-tape');
+    $all('[data-tape]').forEach(function(x){x.classList.remove('sel');}); s.classList.add('sel');
+    $('#ptape').style.background = TAPES[Draft.tape].css; }); });
+  $('#btn-send').addEventListener('click', function(){ location.hash = '#/sent'; });
+  window.scrollTo(0,0);
+}
+/* ============================================================
+   VIEW: sent (link + torn receipt)
+   ============================================================ */
+function renderSent(){
+  if(!Draft.gifts.length){ location.hash='#/make'; return; }
+  var parcel = { to:Draft.to||'someone lovely', from:Draft.from||'a secret admirer',
+    wrap:Draft.wrap, tape:Draft.tape, gifts:Draft.gifts };
+  var code = encodeParcel(parcel);
+  var link = location.origin + location.pathname + '#/b/' + code;
+  var rows = Draft.gifts.map(function(g){
+    var m = GIFT_META[g.t];
+    return '<div class="row"><span>'+m.emoji+' '+m.name+'</span><span>'+fmtSecs(Draft.times[g.t]||0)+' of love</span></div>';
+  }).join('');
+  var app = $('#app');
+  app.innerHTML =
+  '<div class="center" style="padding:26px 0 6px;">'+
+    '<h1 style="font-size:34px;">it\'s on its way!</h1>'+
+    '<p class="type" style="font-size:13px;">your parcel is sealed. send this link to <b>'+esc(parcel.to)+'</b>:</p>'+
+  '</div>'+
+  '<div class="linkbox"><input id="sharelink" readonly value="'+esc(link)+'">'+
+  '<button class="btn small" id="btn-copy">copy</button></div>'+
+  '<div class="receipt"><h3>~ packing receipt ~</h3>'+
+    '<div class="row"><span>for</span><span>'+esc(parcel.to)+'</span></div>'+
+    '<div class="row"><span>from</span><span>'+esc(parcel.from)+'</span></div>'+
+    rows+
+    '<div class="row"><span>postage</span><span>free, always</span></div>'+
+    '<div class="type center" style="font-size:11px;margin-top:10px;">thank you for making something by hand.</div>'+
+  '</div>'+
+  '<div class="center mt"><a class="btn ghost" href="#/b/'+code+'">peek inside first</a></div>'+
+  '<div class="center mt"><a class="type" style="font-size:13px;" href="#/">make another parcel &rarr;</a></div>'+
+  '<footer class="site">made slowly by hand · choti khushi</footer>';
+  $('#btn-copy').addEventListener('click', function(){
+    var inp = $('#sharelink'); inp.select();
+    var done = function(){ $('#btn-copy').textContent = 'copied!'; };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(inp.value).then(done).catch(function(){ document.execCommand('copy'); done(); });
+    } else { document.execCommand('copy'); done(); }
+  });
+  window.scrollTo(0,0);
+}
+/* ============================================================
+   VIEW: open a parcel (#/b/<data>)
+   ============================================================ */
+function renderOpen(code){
+  var app = $('#app');
+  var p = decodeParcel(code);
+  if(!p){
+    app.innerHTML =
+    '<div class="lost"><div class="big">\uD83D\uDCEA</div>'+
+    '<h1 style="font-size:30px;">oh no…</h1>'+
+    '<p class="type" style="font-size:14px;">this parcel got lost in the mail.<br>the link looks damaged or incomplete.</p>'+
+    '<div class="center mt"><a class="btn" href="#/">make a new parcel</a></div></div>'+
+    '<footer class="site">made slowly by hand · choti khushi</footer>';
+    window.scrollTo(0,0); return;
+  }
+  var wrap = PAPERS[p.wrap||0] || PAPERS[0];
+  var tape = TAPES[p.tape||0] || TAPES[0];
+  app.innerHTML =
+  '<div class="center" style="padding:30px 0 6px;">'+
+    '<div class="type" style="font-size:12px;letter-spacing:.2em;">a parcel arrived for</div>'+
+    '<div class="wordmark" style="font-size:clamp(44px,11vw,80px);">'+esc(p.to)+'</div>'+
+    '<p class="type" style="font-size:13px;">from '+esc(p.from)+' · made slowly by hand</p>'+
+  '</div>'+
+  '<div class="burst-wrap" id="stage1">'+
+    '<div class="parcel big tilt-l" id="bigparcel" style="background:'+wrap.c+';">'+
+      '<div class="tape-strip" style="background:'+tape.css+';"></div>'+
+      '<div class="to-name">'+esc(p.to)+'</div>'+
+    '</div>'+
+    '<p class="type" style="font-size:14px;margin-top:14px;">tap the parcel to open it \u2661</p>'+
+  '</div>'+
+  '<div id="stage2" class="hidden">'+
+    '<div class="gift-burst" id="burst"></div>'+
+    '<div class="viewer card tilt-r" id="viewer"><div class="tape"></div><div id="vbody"></div></div>'+
+    '<div class="card tilt-l2 mt"><div class="type" style="font-size:13px;text-align:center;">'+
+      'that\'s everything inside.<br>someone sat down and made these<br>just for you, '+esc(p.to)+'.<br><br>'+
+      '\u2661<br><br>take a copy home: bookmark this link —<br>your parcel lives inside it, forever.</div></div>'+
+    '<div class="center mt"><a class="btn" href="#/make">make one back \u2192</a></div>'+
+  '</div>'+
+  '<footer class="site">made slowly by hand · choti khushi</footer>';
+  $('#bigparcel').addEventListener('click', function(){
+    $('#stage1').classList.add('hidden');
+    var s2 = $('#stage2'); s2.classList.remove('hidden');
+    var burst = $('#burst');
+    p.gifts.forEach(function(g, i){
+      var m = GIFT_META[g.t];
+      var d = document.createElement('div');
+      d.className = 'burst-item'; d.style.animationDelay = (i*0.12)+'s';
+      d.textContent = m.emoji; d.title = m.name;
+      d.addEventListener('click', function(){ showGift(g, d); });
+      burst.appendChild(d);
+    });
+    showGift(p.gifts[0], burst.children[0]);
+  });
+  function showGift(g, el){
+    $all('.burst-item').forEach(function(x){x.classList.remove('sel');});
+    if(el) el.classList.add('sel');
+    var m = GIFT_META[g.t], vb = $('#vbody');
+    var html = '<h2 style="text-align:center;">'+m.emoji+' '+m.name+'</h2>';
+    if(g.t==='l'){
+      var e = ENVS[g.d.e||0];
+      html += '<div class="env-wrap open" id="ov-env"><div class="env-body" style="background:'+e.c+'"></div>'+
+        '<div class="env-letter" style="transform:translateY(-64%);z-index:4;box-shadow:var(--shadow);">'+
+        '<div class="mini" style="font-family:\'Special Elite\',monospace;font-size:13px;white-space:pre-wrap;">'+esc(g.d.x)+'</div></div>'+
+        '<div class="env-flap" style="background:'+e.c+';transform:rotateX(178deg);z-index:1;"></div></div>'+
+        '<p class="type center" style="font-size:12px;">tap the envelope to tuck the letter back in</p>';
+      vb.innerHTML = html;
+      $('#ov-env').addEventListener('click', function(){ this.classList.toggle('open'); });
+    }
+    else if(g.t==='s'){
+      html += '<div class="center"><div class="diecut"><canvas id="ov-s" width="300" height="225"></canvas>'+
+        '<div class="shine'+(g.d.f===1?' gloss':g.d.f===2?' holo':'')+'"></div></div></div>'+
+        '<p class="type center" style="font-size:12px;">hand-drawn, die-cut, '+
+        (g.d.f===1?'glossy':g.d.f===2?'holographic':'matte')+' finish</p>';
+      vb.innerHTML = html;
+      renderStickerCanvas($('#ov-s'), g.d);
+    }
+    else if(g.t==='t'){
+      html += '<div class="seq-labels" id="ov-seq"></div>'+
+        '<div class="center"><button class="pill-cta" id="ov-play" style="background:var(--mint);">\u25B6 play their tune</button></div>';
+      vb.innerHTML = html;
+      var grid = (g.d.g||'').split('');
+      var lab = $('#ov-seq'), h2 = '';
+      TUNE_NOTES.forEach(function(note, ni){
+        h2 += '<div class="nl">'+note.n+'</div><div class="seq" data-row="'+ni+'">';
+        for(var s=0;s<16;s++) h2 += '<div class="cell'+(grid[s*5+ni]==='1'?' on':'')+'" data-s="'+s+'"></div>';
+        h2 += '</div>';
+      });
+      lab.innerHTML = h2;
+      var playing=false, timer=null, step=0;
+      $('#ov-play').addEventListener('click', function(){
+        if(playing){ playing=false; clearInterval(timer);
+          $all('#ov-seq .cell.playing').forEach(function(c){c.classList.remove('playing');});
+          this.innerHTML='\u25B6 play their tune'; return; }
+        playing=true; step=0; this.innerHTML='\u25A0 stop'; ensureAudio();
+        timer=setInterval(function(){
+          $all('#ov-seq .cell.playing').forEach(function(c){c.classList.remove('playing');});
+          for(var ni=0;ni<5;ni++) if(grid[step*5+ni]==='1'){
+            blip(TUNE_NOTES[ni].f, 0.22);
+            var cell = $all('#ov-seq .seq')[ni]; cell = cell && $all('.cell', cell)[step];
+            if(cell) cell.classList.add('playing');
+          }
+          step=(step+1)%16;
+        }, 240);
+      });
+    }
+    else if(g.t==='k'){
+      html += '<div class="charm-stage"><svg class="charm" id="ov-charm" width="170" height="210" viewBox="0 0 170 210"></svg></div>'+
+        '<p class="type center" style="font-size:12px;">tap the charm to shake it</p>';
+      vb.innerHTML = html;
+      drawCharmSVG($('#ov-charm'), g.d);
+      $('#ov-charm').addEventListener('click', function(){
+        this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); });
+    }
+    else if(g.t==='h'){
+      var N=11, sh='';
+      for(var y=0;y<N;y++) for(var x=0;x<N;x++){
+        var st=null;
+        for(var i=0;i<g.d.x.length;i++) if(g.d.x[i][0]===x&&g.d.x[i][1]===y){st=g.d.x[i];break;}
+        if(st){ var c=STITCH_COLORS[st[2]%STITCH_COLORS.length];
+          sh+='<svg viewBox="0 0 20 20" width="20" height="20"><line x1="3" y1="3" x2="17" y2="17" stroke="'+c+'" stroke-width="3.4" stroke-linecap="round"/><line x1="17" y1="3" x2="3" y2="17" stroke="'+c+'" stroke-width="3.4" stroke-linecap="round"/></svg>';
+        } else sh+='<span style="width:20px;height:20px;display:inline-block;"></span>';
+      }
+      html += '<div class="center"><div style="display:grid;grid-template-columns:repeat(11,20px);gap:0;background:#fffdf9;border:2px solid rgba(26,26,26,.2);border-radius:10px;padding:12px;width:fit-content;margin:0 auto;">'+sh+'</div></div>'+
+        '<div class="counter">'+g.d.x.length+' stitches, placed one by one</div>';
+      vb.innerHTML = html;
+    }
+  }
+  window.scrollTo(0,0);
+}
+/* shared renderers (open view) */
+function renderStickerCanvas(cv, d){
+  var c = cv.getContext('2d'), W=cv.width, H=cv.height;
+  c.clearRect(0,0,W,H);
+  (d.w||[]).forEach(function(st){
+    c.strokeStyle='#fffdf9'; c.lineWidth=(st.z+7)*0.5; c.lineCap='round'; c.lineJoin='round';
+    c.beginPath();
+    st.p.forEach(function(pt,i){ var x=pt[0]/100*W, y=pt[1]/100*H; if(i===0)c.moveTo(x,y); else c.lineTo(x,y); });
+    if(st.p.length>1) c.stroke();
+    else { c.fillStyle='#fffdf9'; c.beginPath(); c.arc(st.p[0][0]/100*W, st.p[0][1]/100*H, (st.z+7)*0.25, 0, 7); c.fill(); }
+  });
+  (d.w||[]).forEach(function(st){
+    c.strokeStyle=INKS[st.c]||'#1a1a1a'; c.lineWidth=st.z*0.5; c.lineCap='round'; c.lineJoin='round';
+    c.beginPath();
+    st.p.forEach(function(pt,i){ var x=pt[0]/100*W, y=pt[1]/100*H; if(i===0)c.moveTo(x,y); else c.lineTo(x,y); });
+    if(st.p.length===1){ c.fillStyle=INKS[st.c]||'#1a1a1a'; c.beginPath();
+      c.arc(st.p[0][0]/100*W, st.p[0][1]/100*H, st.z*0.25, 0, 7); c.fill(); }
+    else c.stroke();
+  });
+}
+function drawCharmSVG(svg, d){
+  var shape=d.s||0, resin=d.r||0, fill=d.f||0, emboss=d.e||[];
+  var w = shape===0?120:130, h = shape===0?130:110, cx=85, cy=105;
+  var shapeEl = shape===0
+    ? '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(w/2)+'" ry="'+(h/2)+'" />'
+    : '<rect x="'+(cx-w/2)+'" y="'+(cy-h/2)+'" width="'+w+'" height="'+h+'" rx="18" />';
+  var deco='';
+  for(var i=0;i<7;i++){
+    var px=cx-w/2+14+(i*37)%(w-28), py=cy-h/2+16+(i*53)%(h-32);
+    if(fill===0) deco+='<text x="'+px+'" y="'+py+'" font-size="15" text-anchor="middle">\u2B50</text>';
+    else if(fill===1) deco+='<text x="'+px+'" y="'+py+'" font-size="14" text-anchor="middle">\uD83D\uDC96</text>';
+    else deco+='<circle cx="'+px+'" cy="'+py+'" r="3.5" fill="'+INKS[i%INKS.length]+'" opacity=".8"/>';
+  }
+  svg.innerHTML =
+    '<circle cx="85" cy="18" r="9" fill="none" stroke="#1a1a1a" stroke-width="4"/>'+
+    '<line x1="85" y1="27" x2="85" y2="'+(cy-h/2)+'" stroke="#1a1a1a" stroke-width="4"/>'+
+    '<g fill="'+RESINS[resin].c+'" stroke="#1a1a1a" stroke-width="3">'+shapeEl+'</g><g>'+deco+'</g>'+
+    '<g fill="none" stroke="#fffdf9" stroke-width="3" stroke-linecap="round" opacity=".85">'+
+    emboss.map(function(st){ return '<path d="M'+st.p.map(function(p){return (p[0]/100*170)+' '+(p[1]/100*210);}).join(' L')+'"/>'; }).join('')+'</g>';
+}
+/* ---------- boot ---------- */
+route();
+</script>
+</body>
+</html>
